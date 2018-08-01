@@ -10,7 +10,7 @@ namespace Assets.Minamo.Editor {
         string versionName;
         // android = version code
         // ios : build number
-        int versionCode;
+        string versionCode;
 
         internal Modifier_Identification(BuildTargetGroup targetGroup) {
             this.targetGroup = targetGroup;
@@ -19,18 +19,16 @@ namespace Assets.Minamo.Editor {
         public void Reload(AnyDictionary dict) {
             packageName = dict.GetValue<string>("packageName");
             versionName = dict.GetValue<string>("versionName");
-            versionCode = dict.GetValue<int>("versionCode");
+            versionCode = dict.GetValue<string>("versionCode");
         }
 
         internal static Modifier_Identification Current(BuildTargetGroup targetGroup) {
-            int versionCode = 0;
+            string versionCode = "";
             if(targetGroup == BuildTargetGroup.Android) {
-                versionCode = PlayerSettings.Android.bundleVersionCode;
+                versionCode = PlayerSettings.Android.bundleVersionCode.ToString();
 
             } else if(targetGroup == BuildTargetGroup.iOS) {
-                if(!int.TryParse(PlayerSettings.iOS.buildNumber, out versionCode)) {
-                    versionCode = 0;
-                }
+                versionCode = PlayerSettings.iOS.buildNumber;
             }
 
             return new Modifier_Identification(targetGroup)
@@ -46,9 +44,13 @@ namespace Assets.Minamo.Editor {
             PlayerSettings.bundleVersion = versionName;
 
             if(targetGroup == BuildTargetGroup.Android) {
-                PlayerSettings.Android.bundleVersionCode = versionCode;
+                int parsed;
+                if(!int.TryParse(versionCode, out parsed)) {
+                    parsed = 0;
+                }
+                PlayerSettings.Android.bundleVersionCode = parsed;
             } else if(targetGroup == BuildTargetGroup.iOS) {
-                PlayerSettings.iOS.buildNumber = versionCode.ToString();
+                PlayerSettings.iOS.buildNumber = versionCode;
             }
         }
 

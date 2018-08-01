@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"strconv"
 
 	"github.com/davecgh/go-spew/spew"
 )
@@ -111,8 +110,7 @@ func getShowString(c *Config) string {
 
 		return ""
 	case "version_code":
-		code := NewOutputContext(c, c.Now).VersionCode
-		return strconv.Itoa(code)
+		return NewOutputContext(c, c.Now).VersionCode
 	case "version_name":
 		return NewOutputContext(c, c.Now).VersionName
 	case "package_name":

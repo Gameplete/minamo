@@ -16,7 +16,7 @@ type OutputContext struct {
 	// android/ios
 	PackageName string
 	VersionName string
-	VersionCode int
+	VersionCode string
 
 	Platform string
 }
